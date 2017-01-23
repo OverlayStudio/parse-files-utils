@@ -40,7 +40,7 @@ function FileServerAdapter(options) {
 
 FileServerAdapter.prototype.createFile = function(filename, data, contentType) {
   //do request where we post the data to the
-  console.log("location to save to: " + this.getFileLocation({},filename));
+ // console.log("location to save to: " + this.getFileLocation({},filename));
   var options = { method: 'POST',
     uri: this._saveURL,
     headers: 
