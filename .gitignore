@@ -38,3 +38,13 @@ config.js
 configDev.js
 configAssetsDev.js
 
+
+configAssetsProd.js
+
+configProd.js
+
+utils.txt
+
+configAssetsStudioProd.js
+
+configStudioProd.js
