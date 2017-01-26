@@ -8,11 +8,11 @@ var request = require("request");
 // * getFileLocation(config, request, filename)
 
 function FileServerAdapter(options) {
-  if (options.fileServerURL) {
-    this._serverURL = options.fileServerURL;
+  if (options.fileServerURLs) {
+    this._serverURLs = options.fileServerURLs;
   }
   else {
-    this._serverURL = process.env.FILE_SERVER_URL;  
+    this._serverURLs = process.env.FILE_SERVER_URLS;  
   }
   
   if (options.projectName) {
@@ -29,20 +29,22 @@ function FileServerAdapter(options) {
     this._saveKey = process.env.FILE_SERVER_KEY;  
   }
   
-  if (options.fileServerSaveURL) {
-    this._saveURL = options.fileServerSaveURL;
+  if (options.fileServerSaveURLs) {
+    this._saveURLs = options.fileServerSaveURLs;
   }
   else {
-    this._saveURL = process.env.FILE_SERVER_SAVE_URL;  
+    this._saveURLs = process.env.FILE_SERVER_SAVE_URLs;  
   }
   
 }
 
 FileServerAdapter.prototype.createFile = function(filename, data, contentType) {
   //do request where we post the data to the
- // console.log("location to save to: " + this.getFileLocation({},filename));
+  console.log("location to save to: " + this.getFileLocation({},filename));
+  var serverIndex = this.serverIndexForFilename(filename);
+  var serverURL = this._saveURLs[serverIndex];
   var options = { method: 'POST',
-    uri: this._saveURL,
+    uri: serverURL,
     headers: 
       {
        'save-key': this._saveKey,
@@ -83,8 +85,10 @@ FileServerAdapter.prototype.getFileData = function(filename) {
   }
 
 FileServerAdapter.prototype.deleteFile = function(filename) {
+   var serverIndex = this.serverIndexForFilename(filename);
+   var serverURL = this._saveURLs[serverIndex];
    var options = { method: 'DELETE',
-    url: this._saveURL,
+    url: serverURL,
     headers: 
       { 'cache-control': 'no-cache',
        'save-key': this._saveKey,
@@ -103,9 +107,18 @@ FileServerAdapter.prototype.deleteFile = function(filename) {
   });
 }
 
+FileServerAdapter.prototype.serverIndexForFilename = function(filename) {
+  if (filename.startsWith("mfp2_")) {
+    return 1;
+  }
+  return 0;
+}
+
 FileServerAdapter.prototype.getFileLocation = function(config, filename) {
+  var serverIndex = this.serverIndexForFilename(filename);
+  var serverURL = this._serverURLs[serverIndex];
   filename = encodeURIComponent(filename);
-  return this._serverURL + '/' + this._projectName + '/' + filename;
+  return serverURL+ '/' + this._projectName + '/' + filename;
 }
 
 module.exports = FileServerAdapter;
