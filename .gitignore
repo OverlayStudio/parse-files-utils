@@ -48,3 +48,5 @@ utils.txt
 configAssetsStudioProd.js
 
 configStudioProd.js
+
+configStudioLocal.js
