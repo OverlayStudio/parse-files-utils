@@ -12,7 +12,7 @@ function FileServerAdapter(options) {
     this._serverURLs = options.fileServerURLs;
   }
   else {
-    this._serverURLs = process.env.FILE_SERVER_URLS;  
+    this._serverURLs = JSON.parse(process.env.FILE_SERVER_URLS);  
   }
   
   if (options.projectName) {
@@ -33,14 +33,14 @@ function FileServerAdapter(options) {
     this._saveURLs = options.fileServerSaveURLs;
   }
   else {
-    this._saveURLs = process.env.FILE_SERVER_SAVE_URLs;  
+    this._saveURLs = JSON.parse(process.env.FILE_SERVER_SAVE_URLS);  
   }
-  
+  // console.log(this._saveURLs);
 }
 
 FileServerAdapter.prototype.createFile = function(filename, data, contentType) {
   //do request where we post the data to the
-  console.log("location to save to: " + this.getFileLocation({},filename));
+  // console.log("location to save to: " + this.getFileLocation({},filename));
   var serverIndex = this.serverIndexForFilename(filename);
   var serverURL = this._saveURLs[serverIndex];
   var options = { method: 'POST',
