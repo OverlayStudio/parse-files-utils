@@ -73,7 +73,11 @@ FileSystemAdapter.prototype.getFileLocation = function(config, filename) {
     if (this._filesDir.startsWith('/')) {
       if (filename) {
         //add the 10th letter of the filename to be a directory
-        return path.join(this._filesDir,filename.substring(10,13));
+        var substring = filename.substring(10,13)
+        if (substring == 'f6f') {
+          substring = 'F6F';  //ext4 has a collision with some other filename and returns an out of space error
+        }
+        return path.join(this._filesDir,substring);
       }
       else {
         return this._filesDir;  
