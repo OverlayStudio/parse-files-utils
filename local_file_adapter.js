@@ -67,11 +67,17 @@ FileSystemAdapter.prototype.getFileLocation = function(config, filename) {
 /*
   Helpers
  --------------- */
- FileSystemAdapter.prototype._getApplicationDir = function() {
+ FileSystemAdapter.prototype._getApplicationDir = function(filename) {
 
   if (this._filesDir) {
     if (this._filesDir.startsWith('/')) {
-      return this._filesDir;
+      if (filename) {
+        //add the 10th letter of the filename to be a directory
+        return path.join(this._filesDir,filename.substring(10,12)));
+      }
+      else {
+        return this._filesDir;  
+      }
     }
     return path.join('files', this._filesDir);
   } else {
@@ -84,7 +90,7 @@ FileSystemAdapter.prototype._applicationDirExist = function() {
 }
 
 FileSystemAdapter.prototype._getLocalFilePath = function(filename) {
-  let applicationDir = this._getApplicationDir();
+  let applicationDir = this._getApplicationDir(filename);
   if (!fs.existsSync(applicationDir)) {
     this._mkdir(applicationDir);
   }
