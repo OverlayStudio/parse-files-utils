@@ -73,7 +73,7 @@ FileSystemAdapter.prototype.getFileLocation = function(config, filename) {
     if (this._filesDir.startsWith('/')) {
       if (filename) {
         //add the 10th letter of the filename to be a directory
-        return path.join(this._filesDir,filename.substring(10,12)));
+        return path.join(this._filesDir,filename.substring(10,12));
       }
       else {
         return this._filesDir;  
